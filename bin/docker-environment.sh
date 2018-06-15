@@ -31,3 +31,12 @@ function help(){
         help        - print this message
     "
 }
+
+if test ! -d "$ROOT_PATH";then
+    error "ROOT_PATH have to be defined"
+fi
+
+if test $? -gt 0;then
+    # failed to determine root path
+    exit 1
+fi
