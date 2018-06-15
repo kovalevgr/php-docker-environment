@@ -32,6 +32,21 @@ function help(){
     "
 }
 
+function check_dependencies()
+{
+    # ensure docker exists
+    docker_version=$(docker -v)
+    if ! test $? -eq 0;then
+        error "docker is not available"
+    fi
+
+    # ensure docker-compose exists
+    docker_compose_version=$(docker-compose -v)
+    if ! test $? -eq 0;then
+        error "docker-compose is not available"
+    fi
+}
+
 if test ! -d "$ROOT_PATH";then
     error "ROOT_PATH have to be defined"
 fi
@@ -40,3 +55,5 @@ if test $? -gt 0;then
     # failed to determine root path
     exit 1
 fi
+
+check_dependencies
