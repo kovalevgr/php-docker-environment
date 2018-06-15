@@ -1,0 +1,13 @@
+{
+    "name": "igor/php-docker-environment",
+    "description": "Generate php docker environment",
+    "require": {
+        "twig/twig": "^2.4"
+    },
+    "authors": [
+        {
+            "name": "Kovalev Igor",
+            "email": "kovalevgr@gmail.com"
+        }
+    ]
+}
