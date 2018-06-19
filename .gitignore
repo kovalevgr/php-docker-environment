@@ -1,2 +1,5 @@
 .idea/*
 /vendor/
+/runtime
+docker-compose.compiled.yml
+docker-environment.config.php
