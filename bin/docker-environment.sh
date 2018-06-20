@@ -167,11 +167,9 @@ function ask_dependencies()
 
 function dump_config()
 {
-echo "$1"
-
-exit 1
     op_result=$(
     docker run --rm --volume="$ROOT_PATH":/app php:alpine php -r '
+        $fileName = "/app/docker-environment.config.php";
         parse_str($argv[1], $vars);
         $varsFixed = [];
         foreach($vars as $varName => $var) {
@@ -200,7 +198,18 @@ exit 1
             }
         }
 
-        file_put_contents("/app/" . "docker-environment.config.php", sprintf("<?php return %s;", var_export($varsFixed, true)));
+        $varsFixed['container']['projects'] = [$varsFixed['container']['projects']];
+
+        if (file_exists($fileName)) {
+            $config = require $fileName;
+
+            $projects = $config['container']['projects'] ?? [];
+            foreach ($projects as $project) {
+                $varsFixed['container']['projects'][] = $project;
+            }
+        }
+
+        file_put_contents($fileName, sprintf("<?php return %s;", var_export($varsFixed, true)));
     ' -- "$1")
     if test $? -gt 0; then
         error "$op_result"
