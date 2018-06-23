@@ -1,0 +1,68 @@
+version: "3"
+services:
+  redis:
+    image: redis:alpine
+    container_name: ms-redis
+{% if container["memcached"] is defined %}
+  memcached:
+    image: memcached:alpine
+    container_name: ms-memcached
+{% endif %}
+{% if container["rabbitmq"] is defined %}
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: ms-tw-rabbit
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+      RABBITMQ_DEFAULT_USER: "rabbitmq"
+      RABBITMQ_DEFAULT_PASS: "rabbitmq"
+      RABBITMQ_DEFAULT_VHOST: "/"
+{% endif %}
+  web:
+    image: nginx:alpine
+    container_name: ms-nginx
+    environment:
+      - SUDO_UID
+      - DEVELOPER={{developer}}
+    volumes:
+      - ./runtime/docker/dev/nginx/nginx.conf:/etc/nginx/conf.d/all.nginx.conf
+{% for key, project in container["projects"] %}
+      - {{ project['path'] }}:/app.{{ project['name'] }}
+{% endfor %}
+    ports:
+      - "{{ container["nginx"]["port"] }}:80"
+    networks:
+      default:
+        aliases:
+{% for key, project in container["projects"] %}
+            - {{ project['name'] }}.{{developer}}.local.com
+{% endfor %}
+    links:
+{% for key, project in container["projects"] %}
+      - php-{{ project['name'] }}
+{% endfor %}
+
+{% for key, project in container["projects"] %}
+  php-{{ project['name'] }}:
+    build: {{ project['path'] }}
+    container_name: ms-php-{{ project['name'] }}
+    links:
+      - redis
+{% if container["memcached"] is defined %}
+      - memcached
+{% endif %}
+    environment:
+      - SUDO_UID
+      - XDEBUG_HOST={{xdebug["host"]}}
+      - DEVELOPER={{developer}}
+    working_dir: /app.{{ project['name'] }}
+    volumes:
+      - {{ project['path'] }}:/app.{{ project['name'] }}
+      - ./runtime/docker/dev/fpm/php-fpm.conf:/etc/php7/php-fpm.d/www.conf
+{% endfor %}
+networks:
+  default:
+    driver: bridge
