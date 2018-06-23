@@ -1,6 +1,13 @@
 {
-    "name": "igor/php-docker-environment",
+  "type": "package",
+  "name": "kovalevgr/php-docker-environment",
+  "version": "dev-master",
     "description": "Generate php docker environment",
+  "source": {
+    "url": "https://github.com/kovalevgr/php-docker-environment.git",
+    "type": "git",
+    "reference": "master"
+  },
     "require": {
         "twig/twig": "^2.4"
     },
