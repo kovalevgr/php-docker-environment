@@ -278,6 +278,21 @@ function reset_config()
     fi
 }
 
+function help()
+{
+    echo "
+            Usage: $0 [COMMAND]
+
+            Commands:
+                up          - Create and start projects
+                down        - Stop and remove project containers, networks, images, and volumes
+                configure   - Configure docker environment
+                check       - ensure that all needed requirements for building environment has been met
+                reset       - reset config environment
+                help        - print this message
+    "
+}
+
 function load_docker_environment_config(){
     # ensuring docker environment file is readable
     if ! test -r "./docker-environment.yml"
@@ -309,4 +324,10 @@ case "$1" in
         shift
         reset_config
         ;;
+    check)
+        check_dependencies
+        ;;
+    *)
+       help
+       ;;
 esac
