@@ -248,6 +248,35 @@ function compile_docker_compose_config()
     fi
 }
 
+function reset_config()
+{
+    op_result=$(
+    docker run --rm --volume="$ROOT_PATH":/app php:alpine php -r '
+        if (file_exists("/app/docker-compose.compiled.yml")) {
+            unlink("/app/docker-compose.compiled.yml");
+        }
+
+        if (file_exists("/app/docker-environment.config.php")) {
+            unlink("/app/docker-environment.config.php");
+        }
+
+        delFolder("/app/runtime");
+
+        function delFolder($dir)
+        {
+            $files = array_diff(scandir($dir), array(".",".."));
+            foreach ($files as $file) {
+            (is_dir("$dir/$file")) ? delFolder("$dir/$file") : unlink("$dir/$file");
+            }
+            return rmdir($dir);
+        }
+
+    ' -- "$1"
+    )
+    if test $? -gt 0; then
+        error "$op_result"
+    fi
+}
 
 function load_docker_environment_config(){
     # ensuring docker environment file is readable
@@ -275,5 +304,9 @@ case "$1" in
     down)
         shift
         docker-compose -f docker-compose.compiled.yml down "$@"
+        ;;
+    reset)
+        shift
+        reset_config
         ;;
 esac
