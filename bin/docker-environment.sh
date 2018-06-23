@@ -272,4 +272,8 @@ case "$1" in
         compile_docker_compose_config
         docker-compose -f docker-compose.compiled.yml up "$@"
         ;;
+    down)
+        shift
+        docker-compose -f docker-compose.compiled.yml down "$@"
+        ;;
 esac
