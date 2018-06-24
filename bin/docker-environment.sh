@@ -169,7 +169,8 @@ function dump_config()
 {
     op_result=$(
     docker run --rm --volume="$ROOT_PATH":/app php:alpine php -r '
-        $fileName = "/app/docker-environment.config.php";
+        $fileName = "/app/vendor/kovalevgr/php-docker-environment/docker-environment.config.php";
+
         parse_str($argv[1], $vars);
         $varsFixed = [];
         foreach($vars as $varName => $var) {
@@ -220,26 +221,26 @@ function compile_docker_compose_config()
 {
     op_result=$(
     docker run --rm --volume="$ROOT_PATH":/app php:alpine php -r '
-        if (!file_exists("/app/docker-environment.config.php")) {
+        if (!file_exists("/app/vendor/kovalevgr/php-docker-environment/docker-environment.config.php")) {
             echo "Docker environment config have not been found";
             exit(1);
         }
 
-        $config = require "/app/docker-environment.config.php";
+        $config = require "/app/vendor/kovalevgr/php-docker-environment/docker-environment.config.php";
 
         require_once "/app/vendor/autoload.php";
 
         $twig = new Twig_Environment(new Twig_Loader_Filesystem(
-            ["/app/data"]
+            ["/app/vendor/kovalevgr/php-docker-environment/data"]
         ), ["debug" => true]);
 
         $twig->addExtension(new Twig_Extension_Debug());
 
-        file_put_contents("/app/docker-compose.compiled.yml", $twig->render("docker-compose.tpl.yml.twig", $config));
-        @mkdir("/app/runtime/docker/dev/nginx", 0777, true);
-        file_put_contents("/app/runtime/docker/dev/nginx/nginx.conf", $twig->render("nginx/nginx.conf.twig", $config));
-        @mkdir("/app/runtime/docker/dev/fpm", 0777, true);
-        file_put_contents("/app/runtime/docker/dev/fpm/php-fpm.conf", $twig->render("fpm/php-fpm.conf.twig", $config));
+        file_put_contents("/app/vendor/kovalevgr/php-docker-environment/docker-compose.compiled.yml", $twig->render("docker-compose.tpl.yml.twig", $config));
+        @mkdir("/app/vendor/kovalevgr/php-docker-environment/runtime/docker/dev/nginx", 0777, true);
+        file_put_contents("/app/vendor/kovalevgr/php-docker-environment/runtime/docker/dev/nginx/nginx.conf", $twig->render("nginx/nginx.conf.twig", $config));
+        @mkdir("/app/vendor/kovalevgr/php-docker-environment/runtime/docker/dev/fpm", 0777, true);
+        file_put_contents("/app/vendor/kovalevgr/php-docker-environment/runtime/docker/dev/fpm/php-fpm.conf", $twig->render("fpm/php-fpm.conf.twig", $config));
 
     ' -- "$1"
     )

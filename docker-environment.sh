@@ -2,4 +2,4 @@
 
 ROOT_PATH=$(pwd)
 
-. bin/docker-environment.sh
+. vendor/kovalevgr/php-docker-environment/bin/docker-environment.sh
