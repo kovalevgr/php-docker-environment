@@ -236,7 +236,7 @@ function compile_docker_compose_config()
 
         $twig->addExtension(new Twig_Extension_Debug());
 
-        file_put_contents("/app/vendor/kovalevgr/php-docker-environment/docker-compose.compiled.yml", $twig->render("docker-compose.tpl.yml.twig", $config));
+        file_put_contents("/app/docker-compose.compiled.yml", $twig->render("docker-compose.tpl.yml.twig", $config));
         @mkdir("/app/vendor/kovalevgr/php-docker-environment/runtime/docker/dev/nginx", 0777, true);
         file_put_contents("/app/vendor/kovalevgr/php-docker-environment/runtime/docker/dev/nginx/nginx.conf", $twig->render("nginx/nginx.conf.twig", $config));
         @mkdir("/app/vendor/kovalevgr/php-docker-environment/runtime/docker/dev/fpm", 0777, true);
@@ -257,11 +257,11 @@ function reset_config()
             unlink("/app/docker-compose.compiled.yml");
         }
 
-        if (file_exists("/app/docker-environment.config.php")) {
-            unlink("/app/docker-environment.config.php");
+        if (file_exists("/app/vendor/kovalevgr/php-docker-environment/docker-environment.config.php")) {
+            unlink("/app/vendor/kovalevgr/php-docker-environment/docker-environment.config.php");
         }
 
-        delFolder("/app/runtime");
+        delFolder("/app/vendor/kovalevgr/php-docker-environment/runtime");
 
         function delFolder($dir)
         {

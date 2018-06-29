@@ -28,7 +28,7 @@ services:
       - SUDO_UID
       - DEVELOPER={{developer}}
     volumes:
-      - ./runtime/docker/dev/nginx/nginx.conf:/etc/nginx/conf.d/all.nginx.conf
+      - ./vendor/kovalevgr/php-docker-environment/runtime/docker/dev/nginx/nginx.conf:/etc/nginx/conf.d/all.nginx.conf
 {% for key, project in container["projects"] %}
       - {{ project['path'] }}:/app.{{ project['name'] }}
 {% endfor %}
@@ -61,7 +61,7 @@ services:
     working_dir: /app.{{ project['name'] }}
     volumes:
       - {{ project['path'] }}:/app.{{ project['name'] }}
-      - ./runtime/docker/dev/fpm/php-fpm.conf:/etc/php7/php-fpm.d/www.conf
+      - ./vendor/kovalevgr/php-docker-environment/runtime/docker/dev/fpm/php-fpm.conf:/etc/php7/php-fpm.d/www.conf
 {% endfor %}
 networks:
   default:

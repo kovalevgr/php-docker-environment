@@ -1,20 +1,25 @@
 {
-  "type": "package",
   "name": "kovalevgr/php-docker-environment",
-  "version": "dev-master",
-    "description": "Generate php docker environment",
+  "description": "Generate php docker environment",
+  "keywords": [
+    "docker",
+    "php"
+  ],
+  "license": "MIT",
+  "type": "package",
   "source": {
     "url": "https://github.com/kovalevgr/php-docker-environment.git",
     "type": "git",
     "reference": "master"
   },
-    "require": {
-        "twig/twig": "^2.4"
-    },
-    "authors": [
-        {
-            "name": "Kovalev Igor",
-            "email": "kovalevgr@gmail.com"
-        }
-    ]
+  "require": {
+    "twig/twig": "^2.4"
+  },
+  "authors": [
+    {
+      "name": "Kovalev Igor",
+      "email": "kovalevgr@gmail.com"
+    }
+  ],
+  "minimum-stability": "dev"
 }
