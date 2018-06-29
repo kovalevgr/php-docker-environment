@@ -5,7 +5,6 @@
     "docker",
     "php"
   ],
-  "license": "MIT",
   "type": "package",
   "source": {
     "url": "https://github.com/kovalevgr/php-docker-environment.git",
