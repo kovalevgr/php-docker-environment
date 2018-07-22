@@ -1,6 +1,7 @@
 {
   "name": "kovalevgr/php-docker-environment",
   "description": "Generate php docker environment",
+  "license": "MIT License",
   "keywords": [
     "docker",
     "php"
