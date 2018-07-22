@@ -20,5 +20,11 @@
       "email": "kovalevgr@gmail.com"
     }
   ],
-  "minimum-stability": "dev"
+  "minimum-stability": "dev",
+  "scripts": {
+    "post-create-project-cmd": [
+      "php -r \"copy('docker-environment.sh', 'docker-environment.sh');\"",
+      "php -r \"copy('Dockerfile', 'Dockerfile');\""
+    ]
+  }
 }
